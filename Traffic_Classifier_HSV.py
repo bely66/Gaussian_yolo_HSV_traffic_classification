@@ -138,7 +138,12 @@ def classify_color_cropped_image(rgb_image):
 
     return classify_color_by_range(hue_1d_rad)
 
+def classify_color (image_np,box):
+    cropped_image = crop_roi_image(image_np, box)
+    result_color_index, _ = classify_color_cropped_image(cropped_image)
+    index = -(result_color_index+1)
 
+    return index
 
 def classify_all_boxes_in_image(image_np, boxes):
     result_index_array = np.zeros(boxes.shape[0], dtype=np.int)
