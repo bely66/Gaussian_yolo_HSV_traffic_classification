@@ -71,7 +71,7 @@ class Infer():
 
 
 
-    def infer(self,image_path=""):
+    def infer(self,image_path="",out="out.jpg"):
         # Load image
         img_orig = cv2.imread(image_path)
         img_t = cv2.cvtColor(img_orig,cv2.COLOR_BGR2RGB)
@@ -136,3 +136,5 @@ class Infer():
             sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
             show_inner_bound=False,  # do not show inner rectangle for simplicity
             instance_colors=colors, linewidth=3)
+        print("saving the image as : ",out)
+        fig.savefig(out)
