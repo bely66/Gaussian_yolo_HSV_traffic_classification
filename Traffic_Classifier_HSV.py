@@ -3,6 +3,15 @@ from skimage.color import rgb2grey,rgb2hsv
 import numpy as np
 
 
+
+def crop_roi_image(image_np, sel_box):
+    im_height, im_width, _ = image_np.shape
+    (left, right, top, bottom) = (sel_box[1] * im_width, sel_box[3] * im_width,
+                                  sel_box[0] * im_height, sel_box[2] * im_height)
+    cropped_image = image_np[int(top):int(bottom), int(left):int(right), :]
+    return cropped_image
+
+
 def get_masked_hue_image(hsv_test_image):
 
 
