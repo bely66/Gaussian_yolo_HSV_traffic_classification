@@ -129,9 +129,9 @@ class Infer():
                 scores.append(cls_conf * conf)
                 colors.append(self.coco_class_colors[int(cls_pred)])
 
-                # image size scale used for sigma visualization
-                h, w, nh, nw, _, _ = info_img
-                sigma_scale_img = (w / nw, h / nh)
+            # image size scale used for sigma visualization
+            h, w, nh, nw, _, _ = info_img
+            sigma_scale_img = (w / nw, h / nh)
 
         fig, ax = vis_bbox(
             img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
