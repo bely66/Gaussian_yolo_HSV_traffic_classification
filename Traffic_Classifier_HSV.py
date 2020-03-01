@@ -141,7 +141,7 @@ def classify_color_cropped_image(rgb_image):
 def classify_color (image_np,box):
     cropped_image = crop_roi_image(image_np, box)
     result_color_index, _ = classify_color_cropped_image(cropped_image)
-    index = -(result_color_index+1)
+    index = (result_color_index+91)
 
     return index
 
