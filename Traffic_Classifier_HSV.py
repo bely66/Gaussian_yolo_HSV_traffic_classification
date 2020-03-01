@@ -5,10 +5,8 @@ import numpy as np
 
 
 def crop_roi_image(image_np, sel_box):
-    im_height, im_width, _ = image_np.shape
-    (left, right, top, bottom) = (sel_box[1] * im_width, sel_box[3] * im_width,
-                                  sel_box[0] * im_height, sel_box[2] * im_height)
-    cropped_image = image_np[int(top):int(bottom), int(left):int(right), :]
+
+    cropped_image = image_np[int(sel_box[0]):int(sel_box[2]), int(sel_box[1]):int(sel_box[3]), :]
     return cropped_image
 
 
@@ -150,7 +148,11 @@ def classify_color_cropped_image(rgb_image):
 def classify_color (image_np,box):
     cropped_image = crop_roi_image(image_np, box)
     result_color_index, _ = classify_color_cropped_image(cropped_image)
-    index = (result_color_index+91)
+    
+    if result_color_index in [3,4]:
+        index = 10
+    else :
+        index = (result_color_index+91)
 
     return index
 
