@@ -31,7 +31,7 @@ class Infer():
         for i in ["red traffic light","yellow traffic light","green traffic light"] :
           self.names.append(i)
 
-        self.detected = ["red traffic light","yellow traffic light","green traffic light","bus","car","truck","motorcycle","bicycle"]
+        self.detected = ["red traffic light","yellow traffic light","green traffic light","bus","car","truck","motorcycle","bicycle","traffic light"]
         # Detection threshold
         self.detect_thresh = detect_thresh
 
@@ -129,15 +129,17 @@ class Infer():
                 scores.append(cls_conf * conf)
                 colors.append(self.coco_class_colors[int(cls_pred)])
 
-            # image size scale used for sigma visualization
-            h, w, nh, nw, _, _ = info_img
-            sigma_scale_img = (w / nw, h / nh)
-
-        fig, ax = vis_bbox(
-            img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
-            sigma_scale_img=sigma_scale_img,
-            sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
-            show_inner_bound=False,  # do not show inner rectangle for simplicity
-            instance_colors=colors, linewidth=3)
-        print("saving the image as : ",out)
-        fig.savefig(out)
+        # image size scale used for sigma visualization
+        h, w, nh, nw, _, _ = info_img
+        sigma_scale_img = (w / nw, h / nh)
+        if len(bboxes)>0:
+            fig, ax = vis_bbox(
+                img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
+                sigma_scale_img=sigma_scale_img,
+                sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
+                show_inner_bound=False,  # do not show inner rectangle for simplicity
+                instance_colors=colors, linewidth=3)
+            print("saving the image as : ",out)
+            fig.savefig(out)
+        else :
+            print("No objects Detected")
