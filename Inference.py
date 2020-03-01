@@ -31,7 +31,7 @@ class Infer():
         for i in ["red traffic light","yellow traffic light","green traffic light"] :
           self.names.append(i)
 
-
+        self.detected = ["red traffic light","yellow traffic light","green traffic light","bus","car","truck","motorcycle","bicycle"]
         # Detection threshold
         self.detect_thresh = detect_thresh
 
@@ -110,25 +110,28 @@ class Infer():
                 output = output.cpu()
 
             x1, y1, x2, y2, conf, cls_conf, cls_pred = output[:7]
-            if self.gaussian:
-                sigma_x, sigma_y, sigma_w, sigma_h = output[7:]
-                sigmas.append([sigma_x, sigma_y, sigma_w, sigma_h])
-
             cls_id = self.coco_class_ids[int(cls_pred)]
-            box = yolobox2label([y1, x1, y2, x2], info_img)
-            if(self.coco_class_names[cls_id]== "traffic light") and (cls_conf*conf)>0.7:
+            if self.coco_class_names[cls_id] in self.detected :
+                if self.gaussian:
+                    sigma_x, sigma_y, sigma_w, sigma_h = output[7:]
+                    sigmas.append([sigma_x, sigma_y, sigma_w, sigma_h])
 
-              cls_id = classify_color(img_t,box)
+
+                box = yolobox2label([y1, x1, y2, x2], info_img)
+
+                if(self.coco_class_names[cls_id]== "traffic light") and (cls_conf*conf)>0.7:
+
+                  cls_id = classify_color(img_t,box)
 
 
-            bboxes.append(box)
-            classes.append(cls_id)
-            scores.append(cls_conf * conf)
-            colors.append(self.coco_class_colors[int(cls_pred)])
+                bboxes.append(box)
+                classes.append(cls_id)
+                scores.append(cls_conf * conf)
+                colors.append(self.coco_class_colors[int(cls_pred)])
 
-            # image size scale used for sigma visualization
-            h, w, nh, nw, _, _ = info_img
-            sigma_scale_img = (w / nw, h / nh)
+                # image size scale used for sigma visualization
+                h, w, nh, nw, _, _ = info_img
+                sigma_scale_img = (w / nw, h / nh)
 
         fig, ax = vis_bbox(
             img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
