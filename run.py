@@ -16,4 +16,4 @@ args = parser.parse_args()
 
 from Inference import Infer
 Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
-Inference_class.infer(args.image,args.out)
+Inference_class.infer(image_path=args.image,out=args.out)

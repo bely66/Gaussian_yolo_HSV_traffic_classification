@@ -19,7 +19,7 @@ class Infer():
     def __init__(self,detect_thresh = 0.5,gpu=-1):
         # Choose config
         cfg_path = './config/gaussian_yolov3_eval.cfg'
-
+        self.vid = 0
         # Specify checkpoint file which contains the weight of the model you want to use
         ckpt_path = 'gaussian_yolov3_coco.pth'
 
@@ -71,9 +71,12 @@ class Infer():
 
 
 
-    def infer(self,image_path="",out="out.jpg"):
+    def infer(self,image_path="",frame=None,video=False,out="out"):
         # Load image
-        img_orig = cv2.imread(image_path)
+        if video :
+            img_orig = frame
+        else :
+            img_orig = cv2.imread(image_path)
         img_t = cv2.cvtColor(img_orig,cv2.COLOR_BGR2RGB)
 
         # Preprocess image
@@ -95,51 +98,56 @@ class Infer():
 
         if outputs[0] is None:
             print("No Objects Deteted!!")
-            sys.exit(0)
-
+            #sys.exit(0)
+        else :
         # Visualize detected bboxes
 
-        bboxes = list()
-        classes = list()
-        scores = list()
-        colors = list()
-        sigmas = list()
-        for output in (outputs[0]):
+            bboxes = list()
+            classes = list()
+            scores = list()
+            colors = list()
+            sigmas = list()
+            for output in (outputs[0]):
 
-            if self.gpu >=0 :
-                output = output.cpu()
+                if self.gpu >=0 :
+                    output = output.cpu()
 
-            x1, y1, x2, y2, conf, cls_conf, cls_pred = output[:7]
-            cls_id = self.coco_class_ids[int(cls_pred)]
-            if self.coco_class_names[cls_id] in self.detected :
-                if self.gaussian:
-                    sigma_x, sigma_y, sigma_w, sigma_h = output[7:]
-                    sigmas.append([sigma_x, sigma_y, sigma_w, sigma_h])
-
-
-                box = yolobox2label([y1, x1, y2, x2], info_img)
-
-                if(self.coco_class_names[cls_id]== "traffic light") and (cls_conf*conf)>0.7:
-
-                  cls_id = classify_color(img_t,box)
+                x1, y1, x2, y2, conf, cls_conf, cls_pred = output[:7]
+                cls_id = self.coco_class_ids[int(cls_pred)]
+                if self.coco_class_names[cls_id] in self.detected :
+                    if self.gaussian:
+                        sigma_x, sigma_y, sigma_w, sigma_h = output[7:]
+                        sigmas.append([sigma_x, sigma_y, sigma_w, sigma_h])
 
 
-                bboxes.append(box)
-                classes.append(cls_id)
-                scores.append(cls_conf * conf)
-                colors.append(self.coco_class_colors[int(cls_pred)])
+                    box = yolobox2label([y1, x1, y2, x2], info_img)
 
-        # image size scale used for sigma visualization
-        h, w, nh, nw, _, _ = info_img
-        sigma_scale_img = (w / nw, h / nh)
-        if len(bboxes)>0:
-            fig, ax = vis_bbox(
-                img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
-                sigma_scale_img=sigma_scale_img,
-                sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
-                show_inner_bound=False,  # do not show inner rectangle for simplicity
-                instance_colors=colors, linewidth=3)
-            print("saving the image as : ",out)
-            fig.savefig(out)
-        else :
-            print("No objects Detected")
+                    if(self.coco_class_names[cls_id]== "traffic light") and (cls_conf*conf)>0.7:
+
+                      cls_id = classify_color(img_t,box)
+
+
+                    bboxes.append(box)
+                    classes.append(cls_id)
+                    scores.append(cls_conf * conf)
+                    colors.append(self.coco_class_colors[int(cls_pred)])
+
+            # image size scale used for sigma visualization
+            h, w, nh, nw, _, _ = info_img
+            sigma_scale_img = (w / nw, h / nh)
+            if len(bboxes)>0:
+                fig, ax = vis_bbox(
+                    img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
+                    sigma_scale_img=sigma_scale_img,
+                    sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
+                    show_inner_bound=False,  # do not show inner rectangle for simplicity
+                    instance_colors=colors, linewidth=3)
+                if video :
+                    print("saving the image as : ",out+str(self.vid)+".jpg")
+                    fig.savefig(out+str(self.vid)+".jpg")
+                    self.vid += 1
+                else :
+                    print("saving the image as : ",out+str(self.vid)+".jpg")
+                    fig.savefig(out+str(self.vid)+".jpg")
+            else :
+                print("No objects Detected")
