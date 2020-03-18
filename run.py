@@ -1,19 +1,22 @@
-
-
+from glob import glob
+import cv2
 import argparse
 
 parser = argparse.ArgumentParser()
+
 parser.add_argument('--gpu',dest = "gpu" ,type=int, default = -1,
                     help='enter the number of gpu')
 
-parser.add_argument('--image_path',dest = "image" , default = "Images/Traffic.jpg",
-                    help='enter the path of the image')
+
+
 parser.add_argument('--image_out',dest = "out" , default = "out.jpg",
                     help='enter the path to the output')
 
 args = parser.parse_args()
-
-
+files = glob("Images/normal/*")
 from Inference import Infer
+
 Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
-Inference_class.infer(image_path=args.image,out=args.out)
+for n,i in enumerate(files) :
+    i = cv2.imread(i)
+    bboxes,classes = Inference_class.infer(image_path=i,out="out/Classification/"+str(n)+".jpg")

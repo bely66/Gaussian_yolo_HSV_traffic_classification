@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import Preprocessing as p
+import Disparity.Preprocessing as p
 
 # trying to eliminate loop over rows
 
@@ -29,11 +29,11 @@ def rolling_sum_vertical(a, n):
 def generate_disparity_map(left_path, right_path, name, downsample_n=1, block_size=11, cmp_range=70):
 
     # image retrieval and gray-scale conversion
-    gray_left = cv2.imread(left_path)
+    gray_left = left_path
     gray_left = np.mean(gray_left, 2)
     gray_left = p.downsample(gray_left, downsample_n)
 
-    gray_right = cv2.imread(right_path)
+    gray_right = right_path
     gray_right = np.mean(gray_right, 2)
     gray_right = p.downsample(gray_right, downsample_n)
 
@@ -55,11 +55,6 @@ def generate_disparity_map(left_path, right_path, name, downsample_n=1, block_si
 
     disparity_matrix = p.upsample(disparity_matrix, downsample_n)
 
-    cv2.imwrite('disparity/heatmap/' + str(name) + '.png', disparity_matrix)
+    cv2.imwrite('out/Disparity' + str(name) + '.png', disparity_matrix)
 
     return disparity_matrix
-
-
-
-
-

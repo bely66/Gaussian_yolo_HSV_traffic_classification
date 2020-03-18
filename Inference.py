@@ -71,12 +71,12 @@ class Infer():
 
 
 
-    def infer(self,image_path="",frame=None,video=False,out="out"):
+    def infer(self,image_path,frame=None,video=False,out="out"):
         # Load image
         if video :
             img_orig = frame
         else :
-            img_orig = cv2.imread(image_path)
+            img_orig = image_path
         img_t = cv2.cvtColor(img_orig,cv2.COLOR_BGR2RGB)
 
         # Preprocess image
@@ -107,6 +107,7 @@ class Infer():
             scores = list()
             colors = list()
             sigmas = list()
+            names = list()
             for output in (outputs[0]):
 
                 if self.gpu >=0 :
@@ -131,6 +132,7 @@ class Infer():
                     classes.append(cls_id)
                     scores.append(cls_conf * conf)
                     colors.append(self.coco_class_colors[int(cls_pred)])
+                    names.append(self.names[cls_id])
 
             # image size scale used for sigma visualization
             h, w, nh, nw, _, _ = info_img
@@ -146,8 +148,12 @@ class Infer():
                     print("saving the image as : ",out+str(self.vid)+".jpg")
                     fig.savefig(out+str(self.vid)+".jpg")
                     self.vid += 1
+
                 else :
                     print("saving the image as : ",out+str(self.vid)+".jpg")
-                    fig.savefig(out+str(self.vid)+".jpg")
+                    fig.savefig(out)
+                return bboxes , names
+
+
             else :
                 print("No objects Detected")
