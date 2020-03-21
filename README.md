@@ -24,7 +24,10 @@ These instructions will get you a copy of the project up and running on your loc
 > seaborn==0.9.0
 
 > scikit-image
-`pip install -r requirements/requirements.txt`
+
+```
+pip install -r requirements/requirements.txt
+```
 
 ### Download Gaussian Yolov3 Weights for ms-coco Dataset
 ```
@@ -35,26 +38,39 @@ curl -sLb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${COD
 
 ```
 ### Download MS-COCO Dataset 
-`bash requirements/getcoco.sh
-`
+```bash requirements/getcoco.sh
+```
+
 
 ## Running the scripts 
 ### Evaluation on COCO 
-`python train.py --cfg config/gaussian_yolov3_eval.cfg --eval_interval 1  --checkpoint gaussian_yolov3_coco.pth`
+```
+python train.py --cfg config/gaussian_yolov3_eval.cfg --eval_interval 1  --checkpoint gaussian_yolov3_coco.pth
+```
 ### 2D detection 
 > Images 
 
-`python run.py`
+```
+python run.py
+```
 > Videos
 
-`python video.py`
+```
+python video.py
+```
 
 ### Stereo Vision 
 > Images
-`python run_stereo.py`
+```
+python run_stereo.py
+```
 >Video
-`python video_stereo.py`
+```
+python video_stereo.py
+```
 
 
 ## Generating Plots 
-`python graphs.py`
+```
+python graphs.py
+```
