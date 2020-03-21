@@ -71,7 +71,7 @@ class Infer():
 
 
 
-    def infer(self,image_path,frame=None,video=False,out="out"):
+    def infer(self,image_path=None,frame=None,video=False,out="out"):
         # Load image
         if video :
             img_orig = frame
@@ -98,6 +98,8 @@ class Infer():
 
         if outputs[0] is None:
             print("No Objects Deteted!!")
+
+            return None , None
             #sys.exit(0)
         else :
         # Visualize detected bboxes

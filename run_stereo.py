@@ -31,23 +31,24 @@ def get_distance(d_ma,box):
 
 
 Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
+d = defaultdict(dict)
 for n,i in enumerate(files) :
-    d = defaultdict(list)
+    d[n]
     i = cv2.imread(i)
     l = i[:,:i.shape[1]//2]
     r = i[:,i.shape[1]//2:]
     bboxes,classes = Inference_class.infer(image_path=l,out="out/Disparity/0-"+str(n)+".jpg")
     d_map = fdm.generate_disparity_map(l,r,str(n))
-    d["name"]
-    d["X"]
-    d["Y"]
-    d["Z"]
+    d[n]["name"]=[]
+    d[n]["X"]=[]
+    d[n]["Y"]=[]
+    d[n]["Z"]=[]
     for b in range(len(bboxes)) :
-        d["name"].append(classes[b])
-        d["X"].append((bboxes[b][1]+bboxes[b][3])//2)
-        d["Y"].append((bboxes[b][0]+bboxes[b][2])//2)
+        d[n]["name"].append(classes[b])
+        d[n]["X"].append((bboxes[b][1]+bboxes[b][3])//2)
+        d[n]["Y"].append((bboxes[b][0]+bboxes[b][2])//2)
 
         dist = get_distance(d_map,bboxes[b])
-        d["Z"].append(dist)
-    o = pd.DataFrame(d)
-    o.to_csv("out/Disparity/"+str(n)+".csv")
+        d[n]["Z"].append(dist)
+o = pd.DataFrame(d)
+o.to_csv("out/Disparity/"+str(n)+".csv")
