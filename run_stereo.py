@@ -18,7 +18,7 @@ parser.add_argument('--image_out',dest = "out" , default = "out.jpg",
 
 args = parser.parse_args()
 # get the stereo images
-files = glob("Images/stereo/*")
+files = glob("Images/stereo/*.png")
 
 def get_distance(d_ma,box):
     obj = d_ma[int(box[0]):int(box[2]),int(box[1]-10):int(box[3]-20)]
@@ -32,11 +32,11 @@ def get_distance(d_ma,box):
 
 Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
 d = defaultdict(dict)
-for n,i in enumerate(files) :
+for n,f in enumerate(files) :
     d[n]
-    i = cv2.imread(i)
-    l = i[:,:i.shape[1]//2]
-    r = i[:,i.shape[1]//2:]
+    i = cv2.imread(f)
+    l = f[:,:f.shape[1]//2]
+    r = f[:,f.shape[1]//2:]
     bboxes,classes = Inference_class.infer(image_path=l,out="out/Disparity/0-"+str(n)+".jpg")
     d_map = fdm.generate_disparity_map(l,r,str(n))
     d[n]["name"]=[]

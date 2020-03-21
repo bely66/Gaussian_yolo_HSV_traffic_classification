@@ -126,7 +126,7 @@ class Infer():
                     box = yolobox2label([y1, x1, y2, x2], info_img)
 
                     if(self.coco_class_names[cls_id]== "traffic light") and (cls_conf*conf)>0.7:
-
+                        
                       cls_id = classify_color(img_t,box)
 
 

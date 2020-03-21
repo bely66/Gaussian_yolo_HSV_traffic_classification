@@ -55,6 +55,6 @@ def generate_disparity_map(left_path, right_path, name, downsample_n=1, block_si
 
     disparity_matrix = p.upsample(disparity_matrix, downsample_n)
 
-    cv2.imwrite('out/Disparity' + str(name) + '.png', disparity_matrix)
+    cv2.imwrite(str(name) + '.png', disparity_matrix)
 
     return disparity_matrix
