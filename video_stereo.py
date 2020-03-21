@@ -65,9 +65,8 @@ for i , n in enumerate(files):
                            1, (0,0,255), 2, cv2.LINE_AA)
                 cv2.rectangle(l,(x,y),(x2,y2),(0,255,0),2)
             d[i]["name"].append(classes[b])
-            d[i]["X"].append((bboxes[b][1]+bboxes[b][3])//2)
-            d[i]["Y"].append((bboxes[b][0]+bboxes[b][2])//2)
-
+            d[i]["X"].append((bboxes[b][1].item()+bboxes[b][3].item())//2)
+            d[i]["Y"].append((bboxes[b][0].item()+bboxes[b][2].item())//2)
             dist = get_distance(d_map,bboxes[b])
             d[i]["Z"].append(dist)
         out.write(l)

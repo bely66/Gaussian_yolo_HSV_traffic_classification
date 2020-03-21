@@ -45,8 +45,8 @@ for n,f in enumerate(files) :
     d[n]["Z"]=[]
     for b in range(len(bboxes)) :
         d[n]["name"].append(classes[b])
-        d[n]["X"].append((bboxes[b][1]+bboxes[b][3])//2)
-        d[n]["Y"].append((bboxes[b][0]+bboxes[b][2])//2)
+        d[n]["X"].append((bboxes[b][1].item()+bboxes[b][3].item())//2)
+        d[n]["Y"].append((bboxes[b][0].item()+bboxes[b][2].item())//2)
 
         dist = get_distance(d_map,bboxes[b])
         d[n]["Z"].append(dist)
