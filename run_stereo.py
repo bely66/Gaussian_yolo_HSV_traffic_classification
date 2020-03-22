@@ -34,7 +34,7 @@ Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
 d = defaultdict(dict)
 for n,f in enumerate(files) :
     d[n]
-    i = cv2.imread(f)
+    f = cv2.imread(f)
     l = f[:,:f.shape[1]//2]
     r = f[:,f.shape[1]//2:]
     bboxes,classes = Inference_class.infer(image_path=l,out="out/Disparity/0-"+str(n)+".jpg")
