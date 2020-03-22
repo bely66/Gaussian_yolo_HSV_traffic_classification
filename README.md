@@ -38,7 +38,8 @@ curl -sLb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${COD
 
 ```
 ### Download MS-COCO Dataset 
-```bash requirements/getcoco.sh
+```
+bash requirements/getcoco.sh
 ```
 
 
