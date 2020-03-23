@@ -37,7 +37,7 @@ for iter , n in enumerate(files):
     frame_width = int(cap.get(3))
 
     frame_height = int(cap.get(4))
-    out = cv2.VideoWriter("out/s_video/"+str(i)+'outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width//2,frame_height))
+    out = cv2.VideoWriter("out/s_video/"+str(iter)+'outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width//2,frame_height))
 
     print("Now processing Video : ",n)
     print(".............")
@@ -50,7 +50,7 @@ for iter , n in enumerate(files):
 
         l = frame[:,:frame.shape[1]//2]
         r = frame[:,frame.shape[1]//2:]
-
+        dets = []
 
         d["frame_"+str(i)]["name"]=[]
         d["frame_"+str(i)]["X_1"]=[]
@@ -60,7 +60,7 @@ for iter , n in enumerate(files):
         d["frame_"+str(i)]["Z"]=[]
 
         # Our operations on the frame come here
-        bboxes,classes=Inference_class.infer(frame=l,video=True,out="out/s_video/out.jpg")
+        bboxes,classes,scores=Inference_class.infer(frame=l,video=True,out="out/s_video/out.jpg")
 
         d_map = fdm.generate_disparity_map(l,r,"Disparity/"+str(n))
 

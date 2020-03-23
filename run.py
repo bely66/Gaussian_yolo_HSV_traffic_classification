@@ -19,4 +19,4 @@ from Inference import Infer
 Inference_class = Infer(detect_thresh = 0.5,gpu=args.gpu)
 for n,i in enumerate(files) :
     i = cv2.imread(i)
-    bboxes,classes = Inference_class.infer(image_path=i,out="out/Classification/"+str(n)+".jpg")
+    bboxes,classes,scores = Inference_class.infer(image_path=i,out="out/Classification/"+str(n)+".jpg")
