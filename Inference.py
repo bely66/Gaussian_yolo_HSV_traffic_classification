@@ -7,7 +7,7 @@ from Traffic_Classifier_HSV import classify_color
 import cv2
 import torch
 from torch.autograd import Variable
-
+from time import time
 from models.yolov3 import *
 from utils.utils import *
 from utils.parse_yolo_weights import parse_yolo_weights
@@ -91,10 +91,11 @@ class Infer():
         else:
             img = Variable(img.type(torch.FloatTensor))
 
-
+        start_t = time()
         with torch.no_grad():
             outputs = self.model(img)
             outputs = postprocess(outputs, 80, self.confthre, self.nmsthre)
+        print("processed in ",(time()-start_t))
 
         if outputs[0] is None:
             print("No Objects Deteted!!")
