@@ -73,6 +73,7 @@ class Infer():
 
     def infer(self,image_path=None,frame=None,video=False,out="out"):
         # Load image
+        start_t = time()
         if video :
             img_orig = frame
         else :
@@ -91,7 +92,7 @@ class Infer():
         else:
             img = Variable(img.type(torch.FloatTensor))
 
-        start_t = time()
+
         with torch.no_grad():
             outputs = self.model(img)
             outputs = postprocess(outputs, 80, self.confthre, self.nmsthre)
