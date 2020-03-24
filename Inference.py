@@ -164,4 +164,5 @@ class Infer():
                 print("No objects Detected")
 
 
-    def save()
+    def save():
+        pass
