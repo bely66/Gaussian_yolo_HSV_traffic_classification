@@ -73,7 +73,6 @@ class Infer():
 
     def infer(self,image_path=None,frame=None,video=False,out="out"):
         # Load image
-        start_t = time()
         if video :
             img_orig = frame
         else :
@@ -92,15 +91,15 @@ class Infer():
         else:
             img = Variable(img.type(torch.FloatTensor))
 
-
+        start_t = time()
         with torch.no_grad():
             outputs = self.model(img)
             outputs = postprocess(outputs, 80, self.confthre, self.nmsthre)
-        print("processed in ",(time()-start_t))
+
 
         if outputs[0] is None:
             print("No Objects Deteted!!")
-            print("processed in ",(time()-start_t))
+
             return None , None , None
             #sys.exit(0)
         else :
@@ -137,32 +136,10 @@ class Infer():
                     scores.append(cls_conf * conf)
                     colors.append(self.coco_class_colors[int(cls_pred)])
                     names.append(self.names[cls_id])
-                    print("processed in ",(time()-start_t))
 
             # image size scale used for sigma visualization
             h, w, nh, nw, _, _ = info_img
             sigma_scale_img = (w / nw, h / nh)
-            if len(bboxes)>0:
-                fig, ax = vis_bbox(
-                    img_raw, bboxes, label=classes, score=scores, label_names=self.names, sigma=sigmas,
-                    sigma_scale_img=sigma_scale_img,
-                    sigma_scale_xy=2., sigma_scale_wh=2.,  # 2-sigma
-                    show_inner_bound=False,  # do not show inner rectangle for simplicity
-                    instance_colors=colors, linewidth=3)
-                if video :
-                    print("saving the image as : ",out+str(self.vid)+".jpg")
-                    fig.savefig(out+str(self.vid)+".jpg")
-                    self.vid += 1
+            print("processed in ",(time()-start_t))
 
-                else :
-                    print("saving the image as : ",out+str(self.vid)+".jpg")
-                    fig.savefig(out)
-                return bboxes , names , scores
-
-
-            else :
-                print("No objects Detected")
-
-
-    def save():
-        pass
+            return bboxes , names , scores
