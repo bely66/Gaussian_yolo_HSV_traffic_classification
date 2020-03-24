@@ -100,8 +100,8 @@ class Infer():
 
         if outputs[0] is None:
             print("No Objects Deteted!!")
-
-            return None , None
+            print("processed in ",(time()-start_t))
+            return None , None , None
             #sys.exit(0)
         else :
         # Visualize detected bboxes
@@ -137,6 +137,7 @@ class Infer():
                     scores.append(cls_conf * conf)
                     colors.append(self.coco_class_colors[int(cls_pred)])
                     names.append(self.names[cls_id])
+                    print("processed in ",(time()-start_t))
 
             # image size scale used for sigma visualization
             h, w, nh, nw, _, _ = info_img
@@ -161,3 +162,6 @@ class Infer():
 
             else :
                 print("No objects Detected")
+
+
+    def save()
