@@ -1,5 +1,5 @@
 from glob import glob
-import Disparity.FastDP as fdm
+from Disparity.Opencv import process_frame
 import argparse
 import cv2
 import numpy as np
@@ -21,7 +21,7 @@ args = parser.parse_args()
 files = glob("Images/s_video/*.avi")
 
 def get_distance(d_ma,box):
-    obj = d_ma[int(box[0]):int(box[2]),int(box[1]-10):int(box[3]-20)]
+    obj = d_ma[int(box[0]):int(box[2]),int(box[1]):int(box[3])]
     dist =(650*.12) /(obj.ravel())
 
     for i in range(len(dist)) :
@@ -57,12 +57,13 @@ for iter , n in enumerate(files):
         d["frame_"+str(i)]["Y_1"]=[]
         d["frame_"+str(i)]["X_2"]=[]
         d["frame_"+str(i)]["Y_2"]=[]
-        d["frame_"+str(i)]["Z"]=[]
+        #d["frame_"+str(i)]["Z"]=[]
 
         # Our operations on the frame come here
         bboxes,classes,scores=Inference_class.infer(frame=l,video=True,out="out/s_video/out.jpg")
 
-        d_map = fdm.generate_disparity_map(l,r,"Disparity/"+str(n))
+        #d_map = process_frame(l,r)
+        #cv2.imwrite("out/Disparity/"+str(i)+".png",d_map)
 
         if bboxes != None :
             for b in range(len(bboxes)) :
@@ -90,6 +91,7 @@ for iter , n in enumerate(files):
                 d["frame_"+str(i)]["Z"].append(dist)
 
         cv2.imshow("frame",l)
+        i+=1
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         out.write(l)
