@@ -1,5 +1,5 @@
 from glob import glob
-import Disparity.FastDP as fdm
+from Disparity.Opencv import process_frame
 import argparse
 import cv2
 import numpy as np
@@ -29,7 +29,8 @@ for i , file in enumerate(files):
     bboxes,classes = Inference_class.infer(image_path=l,out="out/Hist/0-"+str(i)+".jpg")
 
     #Generating Disparity Map
-    d_map = fdm.generate_disparity_map(l,r,"out/Hist/d"+str(i))
+    d_map = process_frame(l,r)
+    cv2.imwrite("out/Hist/Disparity "+str(i)+".jpg")
     d_d = np.copy(d_map)
     #iterating on the boxes of every object
     for b in range(len(bboxes)):
